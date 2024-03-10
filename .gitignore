@@ -1,0 +1,16 @@
+# Ignore PDF files
+*.pdf
+
+# Ignore binary files
+*_out
+
+# Allow specific file types
+!*.tex
+!*.md
+!*.cpp
+
+# Allow the .gitignore file itself
+!.gitignore
+
+# Allow the README.md file
+!README.md
