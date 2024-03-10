@@ -1,0 +1,98 @@
+\documentclass[a4paper]{article}
+\usepackage[14pt]{extsizes}
+\usepackage[russian]{babel}
+\usepackage[left=20mm, top=15mm, right=15mm, bottom=15mm]{geometry}
+\usepackage{listings}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{listingsutf8}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+% Настройка вида листинга
+\lstset{
+    language=C++,                 % Язык программирования
+    basicstyle=\ttfamily\small,   % Размер и тип шрифта
+    keywordstyle=\color{blue},    % Стиль ключевых слов
+    stringstyle=\color{red},      % Стиль строк
+    commentstyle=\color{gray},   % Стиль комментариев
+    morecomment=[l][\color{magenta}]{\#},
+    breaklines=true,              % Перенос длинных строк
+    numbers=left,                 % Нумерация строк слева
+    numberstyle=\tiny\color{gray},% Стиль нумерованных строк
+    frame=single,                 % Рамка вокруг кода
+    showstringspaces=false        % Не показывать пробелы в строках
+}
+\tikzset{
+startstop/.style={
+rectangle,
+rounded corners,
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+draw=black,
+fill=red!30
+},
+io/.style={
+trapezium,
+trapezium stretches body,
+trapezium left angle=70,
+trapezium right angle=110,
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+draw=black,
+fill=blue!30
+},
+process/.style={
+rectangle,
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+draw=black,
+fill=orange!30
+},
+decision/.style={
+diamond,
+aspect=2,
+minimum width=3cm,
+minimum height=1cm,
+align=center,
+draw=black,
+fill=green!30
+},
+arrow/.style={
+thick,
+->,
+>=stealth
+}
+}
+
+
+% -----------------------------------------------------
+
+\begin{document} 
+
+% Title page
+\input{title}
+
+% First section - Description
+\input{description}
+
+% Second section - Chart diagram
+\input{chart}
+
+% Third section - Code
+\input{code}
+
+% Forth section - Examples of code usage
+\input{examples}
+
+% Fith section - Conclusion
+\input{conclusion}
+
+\end{document}

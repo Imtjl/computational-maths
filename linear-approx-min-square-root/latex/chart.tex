@@ -1,0 +1,41 @@
+\section{Блок-схема алгоритма}
+
+\begin{tikzpicture}[node distance=1cm and 2cm, auto]
+% Place nodes
+\node [startstop] (start) {Start};
+\node [io, below=of start] (input) {Input xVals, yVals};
+\node [decision, below=of input] (decide) {n < 2};
+\node [io, right=of decide] (output1) {Output 0.0};
+\node [process, below=of decide] (compute) {Compute Sums};
+\node [process, below=of compute] (denominator) {Calculate Denominator};
+\node [decision, below=of denominator] (decide2) {Denom. near 0};
+\node [io, right=of decide2] (output2) {Output 0.0};
+\node [process, below=of decide2] (coefficients) {Calculate a, b};
+\node [process, below=of coefficients, text width=6em] (loop) {For i from 0 to n-1};
+\node [process, left=of loop, node distance=3cm] (initmax) {Initialize maxDev to 0};
+\node [process, below=of loop] (compdev) {Compute deviation};
+\node [decision, below=of compdev] (checkmax) {Is deviation > maxDev?};
+\node [process, right=of checkmax, node distance=3cm] (updatemax) {Update maxDev};
+\node [startstop, below=of checkmax] (end) {End};
+\node [io, left=of end, node distance=3cm] (outputmax) {Output maxDev};
+
+% Draw edges
+\draw [arrow] (start) -- (input);
+\draw [arrow] (input) -- (decide);
+\draw [arrow] (decide) -- node [anchor=south] {yes} (output1);
+\draw [arrow] (decide) -- node [anchor=east] {no} (compute);
+\draw [arrow] (compute) -- (denominator);
+\draw [arrow] (denominator) -- (decide2);
+\draw [arrow] (decide2.east) -- node [anchor=south] {yes} (output2);
+\draw [arrow] (decide2) -- node [anchor=east] {no} (coefficients);
+\draw [arrow] (coefficients) -- (loop);
+\draw [arrow] (loop) -- (compdev);
+\draw [arrow] (compdev) -- (checkmax);
+\draw [arrow] (checkmax) -- node [anchor=east] {yes} (updatemax);
+\draw [arrow] (checkmax) -- node [anchor=south] {no} (end);
+\draw [arrow] (updatemax) |- (loop);
+\draw [arrow] (loop) -| (initmax);
+\draw [arrow] (initmax) |- (compdev);
+\draw [arrow] (end) -- (outputmax);
+\end{tikzpicture}
+
