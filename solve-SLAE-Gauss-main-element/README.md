@@ -4,7 +4,6 @@
 
 ## Table of Contents
 
-- [ ] Report
-  - [./Computational_maths_lab2.pdf] light theme
-  - [./Computational_maths_lab2_dark.pdf] dark theme
+- [x] Report
+  - [https://drive.google.com/file/d/1bJuiO23ZYhL7uFWEqtUDcp6qLQ1KOq7-/view?usp=sharing] light theme
 - [./slae.cpp] Implementation
