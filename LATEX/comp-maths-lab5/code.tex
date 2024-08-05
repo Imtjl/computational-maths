@@ -1,0 +1,84 @@
+\newpage
+\section{Программная реализация метода Милна}
+
+\subsection{Реализация и анализ метода}
+
+Метод Милна реализован в виде последовательности шагов, начиная с инициализации начальных точек с помощью метода Рунге-Кутта четвертого порядка, за которым следуют итерации предиктора и корректора Милна. Это обеспечивает точное и эффективное решение дифференциального уравнения.
+
+\subsection{Описание переменных и констант}
+
+\begin{itemize}
+    \item \textbf{fn\_t\& f} — Функциональный тип, представляющий правую часть дифференциального уравнения \( y' = f(x, y) \), где \( x \) и \( y \) — независимая и зависимая переменные соответственно.
+    \item \textbf{double x, double y} — Текущие значения независимой переменной \( x \) и зависимой переменной \( y \), используемые в методах Рунге-Кутта и Милна.
+    \item \textbf{double h} — Шаг сетки для численного решения, который может адаптироваться в процессе выполнения программы для улучшения точности.
+    \item \textbf{double epsilon} — Заданная точность решения, используемая для контроля точности корректора Милна.
+    \item \textbf{double a, double y\_a, double b} — Начальные и конечные точки интервала интегрирования \( a \) и \( b \), а также начальное значение функции \( y(a) = y_a \).
+\end{itemize}
+
+\subsection{Код функции}
+
+Основные функции в программной реализации:
+
+\begin{itemize}
+    \item \textbf{rungeKutta4} — Функция для вычисления начальных точек методом Рунге-Кутта четвертого порядка.
+    \item \textbf{generateStartingPoints} — Функция для генерации начального набора значений, необходимых для начала работы многошагового метода Милна.
+    \item \textbf{milnePredictor} и \textbf{milneCorrector} — Функции предиктора и корректора Милна соответственно, обеспечивающие численное приближение решения ОДУ.
+    \item \textbf{solveByMilne} — Основная функция для решения ОДУ на заданном интервале с использованием метода Милна.
+\end{itemize}
+\subsection{Код функции}
+\begin{lstlisting}
+double rungeKutta4(fn_t& f, double x, double y, double h) {
+    double k1 = h * f(x, y);
+    double k2 = h * f(x + 0.5 * h, y + 0.5 * k1);
+    double k3 = h * f(x + 0.5 * h, y + 0.5 * k2);
+    double k4 = h * f(x + h, y + k3);
+    return y + (k1 + 2 * k2 + 2 * k3 + k4) / 6;
+}
+
+std::vector<double> generateStartingPoints(fn_t& f, double a, double y_a, double h) {
+    std::vector<double> points;
+    points.push_back(y_a);
+    double x = a;
+    double y = y_a;
+    for (int i = 0; i < 3; ++i) {
+        y = rungeKutta4(f, x, y, h);
+        points.push_back(y);
+        x += h;
+    }
+    return points;
+}
+
+double milnePredictor(double y1, double y2, double y3, double y4, double h, fn_t& f, double x) {
+    return y4 + 4.0 * h * (2 * f(x, y3) - f(x - h, y2) + 2 * f(x - 2 * h, y1)) / 3.0;
+}
+
+double milneCorrector(double y2, double y3, double y4, double y_p, double h, fn_t& f, double x) {
+    return y3 + h * (f(x, y4) + 4 * f(x - h, y3) + f(x - 2 * h, y2)) / 3.0;
+}
+
+double solveByMilne(int f, double epsilon, double a, double y_a, double b) {
+    fn_t& func = get_function(f);
+    double h = (b - a) / 100;  // Начальный шаг
+    
+    std::vector<double> startingPoints = generateStartingPoints(func, a, y_a, h);
+    double x = a + 3 * h;
+    double y = startingPoints.back();
+    
+    while (x < b) {
+        double y_pred = milnePredictor(startingPoints[0], startingPoints[1], startingPoints[2], startingPoints[3], h, func, x + h);
+        double y_corr = milneCorrector(startingPoints[1], startingPoints[2], startingPoints[3], y_pred, h, func, x + h);
+        
+        if (std::abs(y_corr - y_pred) < epsilon) {
+            startingPoints.erase(startingPoints.begin());
+            startingPoints.push_back(y_corr);
+            x += h;
+            y = y_corr;
+        } else {
+            h /= 2;  // Уменьшаем шаг
+            startingPoints = generateStartingPoints(func, x - 3 * h, startingPoints[3], h);
+        }
+    }
+    
+    return y;
+}
+\end{lstlisting}

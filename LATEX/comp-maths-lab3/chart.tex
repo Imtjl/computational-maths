@@ -1,0 +1,27 @@
+\section{Блок-схема алгоритма Ньютона для решения СНАУ}
+
+\begin{tikzpicture}[node distance=2cm and 3cm, auto]
+    
+    % Nodes
+    \node (start) [startstop] {Начало};
+    \node (init) [prep, below=of start] {Инициализация параметров};
+    \node (assign) [process, below=of init] {Выбор начального приближения \( x^{(0)} \)};
+    \node (jacob) [process, below=of assign] {Вычисление Якобиана \( J(x^{(k)}) \)};
+    \node (func) [process, below=of jacob] {Вычисление \( F(x^{(k)}) \)};
+    \node (solve) [process, below=of func] {Решение СЛАУ методом Гаусса};
+    \node (update) [process, below=of solve] {Обновление приближения \( x^{(k+1)} = x^{(k)} + \Delta x \)};
+    \node (conv) [decision, below=of update, yshift=-1.5cm] {Сходится?};
+    \node (end) [startstop, right=of conv, xshift=3cm] {Конец};
+    
+    % Arrows
+    \draw [arrow] (start) -- (init);
+    \draw [arrow] (init) -- (assign);
+    \draw [arrow] (assign) -- (jacob);
+    \draw [arrow] (jacob) -- (func);
+    \draw [arrow] (func) -- (solve);
+    \draw [arrow] (solve) -- (update);
+    \draw [arrow] (update) -- (conv);
+    \draw [arrow] (conv) -- node[anchor=south] {да} (end);
+    \draw [arrow] (conv) -- node[near start, above] {нет} ++(-5.5,0) |- (assign);
+
+\end{tikzpicture}

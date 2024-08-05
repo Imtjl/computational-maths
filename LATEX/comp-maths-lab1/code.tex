@@ -1,0 +1,43 @@
+\section{Код численного метода}
+
+\subsection{Реализация и анализ метода наименьших квадратов}
+В этом разделе представлена функция для аппроксимации данных методом наименьших квадратов, написанная на языке программирования C++. Функция принимает на вход два вектора (динамические массивы) вещественных чисел, представляющих собой наборы данных x и y, возвращает максимальное квадратичное отклонение, что помогает оценить наихудший случай ошибки аппроксимации.
+
+\subsection{Код функции}
+\begin{lstlisting}
+double approximate_linear_least_squares(
+    const vector<double>& xVals, 
+    const vector<double>& yVals
+) {
+    int n = xVals.size();    
+
+    // Check if there are enough points for approximation
+    if (n < 2) return 0.0;
+    
+    // Calculating necessary sums for coefficients
+    double xSum = accumulate(xVals.begin(), xVals.end(), 0.0);
+    double ySum = accumulate(yVals.begin(), yVals.end(), 0.0);
+    double xySum = inner_product(xVals.begin(), xVals.end(), yVals.begin(), 0.0);
+    double xSqSum = inner_product(xVals.begin(), xVals.end(), xVals.begin(), 0.0);
+    
+    // Calculating the denominator
+    double denominator = n * xSqSum - xSum * xSum;
+    
+    // Check if denominator is too close to zero (vertical line)
+    if (abs(denominator) < 1e-10) return 0.0;
+    
+    // Calculating coefficients a and b for the linear equation
+    double aCoeff = (n * xySum - xSum * ySum) / denominator;
+    double bCoeff = (ySum * xSqSum - xSum * xySum) / denominator;
+    
+    // Finding the maximum squared deviation
+    double maxSqDev = 0.0;
+    for (size_t i = 0; i < n; ++i) {
+        double approximateY = aCoeff * xVals[i] + bCoeff;
+        double sqDev = pow(yVals[i] - approximateY, 2);
+        maxSqDev = max(maxSqDev, sqDev);
+    }
+    
+    return maxSqDev;
+}
+\end{lstlisting}

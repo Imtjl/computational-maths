@@ -1,0 +1,48 @@
+\newpage
+\section{Код численного метода интегрирования}
+
+\subsection{Реализация и анализ метода}
+Метод численного интегрирования реализован на C++ и используется для вычисления определённого интеграла функции. В основе метода лежит подход трапеций, который итеративно уточняет значение интеграла до достижения заданной точности. Ключевым моментом является разбиение интервала интегрирования на увеличивающееся количество трапеций и вычисление суммы площадей этих трапеций.
+
+\subsection{Описание переменных и констант}
+В функции используются следующие переменные и параметры для контроля точности вычислений и управления процессом интегрирования:
+
+\begin{itemize}
+    \item \textbf{lower\_bound, upper\_bound} — Нижний и верхний пределы интегрирования соответственно.
+    \item \textbf{f} — Идентификатор функции, которая будет интегрироваться.
+    \item \textbf{epsilon} — Заданная точность вычисления интеграла. Итерационный процесс продолжается до тех пор, пока разность между двумя последовательными приближениями интеграла не станет меньше этого значения.
+\end{itemize}
+
+\subsection{Код функции}
+\begin{lstlisting}
+double calculate_integral(double lower_bound, double upper_bound, int f, double epsilon) {
+    fn_t& function = get_function(f);
+
+    // Check for discontinuity or undefined region
+    if ((f == 1 && (lower_bound <= 0 || upper_bound <= 0)) || (f == 5 && (lower_bound <= 0 || upper_bound <= 0))) {
+        error_message = "Integrated function has discontinuity or does not defined in current interval";
+        has_discontinuity = true;
+        return 0.0;
+    }
+
+    int num_trapezoids = 1;
+    double integral = 0.0;
+    double prev_integral = 0.0;
+
+    do {
+        prev_integral = integral;
+        integral = 0.0;
+        double trapezoid_width = (upper_bound - lower_bound) / num_trapezoids;
+
+        for (int i = 0; i < num_trapezoids; i++) {
+            double x1 = lower_bound + i * trapezoid_width;
+            double x2 = lower_bound + (i + 1) * trapezoid_width;
+            integral += 0.5 * (function(x1) + function(x2)) * trapezoid_width;
+        }
+
+        num_trapezoids *= 2;
+    } while (std::abs(integral - prev_integral) > epsilon);
+
+    return integral;
+}
+\end{lstlisting}

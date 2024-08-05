@@ -1,0 +1,42 @@
+\section{Блок-схема метода Гауссса с выбором главного элемента}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+    % Styles
+    \tikzstyle{startstop} = [rectangle, rounded corners, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=red!30]
+    \tikzstyle{process} = [rectangle, minimum width=3cm, minimum height=1cm, text centered, draw=black, fill=orange!30]
+    \tikzstyle{decision} = [diamond, aspect=2, minimum width=3cm, text centered, draw=black, fill=green!30]
+    \tikzstyle{arrow} = [thick,-Stealth]
+
+    % Nodes
+    \node (start) [startstop] {Начало};
+    \node (init) [process, below of=start] {Ввод \( n, A_{n \times n}, b_n \)};
+    \node (fori) [process, below of=init] {for \( i = 0 \) to \( n-1 \)};
+    \node (findpivot) [process, below of=fori] {Поиск \( \max |A_{mi}| \),\\ \( m = i \) to \( n-1 \)};
+    \node (ispivotzero) [decision, below of=findpivot, yshift=-1.5cm] {\( |A_{mi}| < \varepsilon \)};
+    \node (swaprows) [process, below of=ispivotzero, yshift=-1.5cm] {Перестановка строк \( A_i \leftrightarrow A_m \)};
+    \node (forj) [process, below of=swaprows] {for \( j = i+1 \) to \( n-1 \)};
+    \node (update) [process, below of=forj] {\( A_{jk} = A_{jk} - \frac{A_{ji}}{A_{ii}} \cdot A_{ik} \),\\\( k = i \) to \( n \)};
+    \node (endforw) [startstop, below of=update] {Конец прямого хода};
+    \node (forbacki) [process, below of=endforw] {for \( i = n-1 \) to \( 0 \)};
+    \node (solve) [process, below of=forbacki] {\( x_i = \frac{b_i - \sum_{j=i+1}^{n} A_{ij} \cdot x_j}{A_{ii}} \)};
+    \node (end) [startstop, below of=solve] {Конец};
+
+    % Arrows
+    \draw [arrow] (start) -- (init);
+    \draw [arrow] (init) -- (fori);
+    \draw [arrow] (fori) -- (findpivot);
+    \draw [arrow] (findpivot) -- (ispivotzero);
+    \draw [arrow] (ispivotzero) -- node {да} (swaprows);
+    \draw [arrow] (ispivotzero) -- node[anchor=north] {нет решений} ++ (6,0) |- (end);
+    \draw [arrow] (swaprows) -- (forj);
+    \draw [arrow] (forj) -- (update);
+    \draw [arrow] (update) -- (endforw);
+    \draw [arrow] (endforw) -- (forbacki);
+    \draw [arrow] (forbacki) -- (solve);
+    \draw [arrow] (solve) -- (end);
+
+    % Loop arrows
+    \draw [arrow] (forj.west) -- ++(-1.5,0) |- (fori.west);
+    \draw [arrow] (solve.west) -- ++(-1.5,0) |- (forbacki.west);
+
+\end{tikzpicture}

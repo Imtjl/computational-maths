@@ -1,0 +1,51 @@
+\section{Блок-схема метода трапеций}
+
+\begin{tikzpicture}[node distance=1.5cm, auto]
+
+\node (start) [startstop] {Начало};
+\node (in1) [io, below of=start] {\(a, b, \varepsilon\)};
+\node (init1) [process, below of=in1] {\(n=2\)};
+\node (init2) [process, below of=init1] {\(S'=0\)};
+
+% loop for |S'-S| < epsilon
+\node (loop) [process, below of=init2] {\(h=\frac{b-a}{n}\)};
+\node (area) [process, below of=loop] {\(S=\frac{h}{2}(f(a) + f(b))\)};
+
+% % inside loop
+\node (prep1) [prep, below of=area] {\( i=0, x=a \)};
+\node (proc1) [process, below of=prep1] {\(x=a+ih\)};
+\node (proc2) [process, below of=proc1] {\(S=S+hf(x)\)};
+
+\node (dec1) [decision, right of=proc2, yshift=-1.5cm, xshift=4.8cm] {\(|S'-S| > \varepsilon\)};
+
+\node (yes) [process, left of=dec1, align=center, text width=2cm, xshift=-2.5cm, yshift=-2cm] {$S' = S$\\ $n = 2n$};
+
+% no
+\node (out) [io, right of=dec1, xshift=2.5cm, yshift=-2cm] {\(S, n\)};
+\node (stop) [startstop, below of=out] {Конец};
+
+% Arrows
+\draw [arrow] (start) -- (in1);
+\draw [arrow] (in1) -- (init1);
+\draw [arrow] (init1) -- (init2);
+
+\draw [arrow] (init2) -- (loop);
+% % to loop
+\draw [arrow] (loop) -- (area);
+\draw [arrow] (area) -- (prep1);
+\draw [arrow] (prep1) -- (proc1);
+\draw [arrow] (proc1) -- (proc2);
+
+% Loop arrows
+\draw [arrow] (proc2.south) -- ++(0, -1) -| ++(-3,0) |- (prep1.west);
+
+\draw [arrow] (prep1.east) -| (dec1.north);
+
+\draw [arrow] (dec1.west) -| node[near start, anchor=south] {Да} (yes.north);
+\draw [arrow] (dec1.east) -| node[near start, anchor=south] {Нет} (out.north);
+
+\draw [arrow] (yes.south) -- ++(0, -1) -| ++ (-6.5, 0) |- (loop.west);
+\draw [arrow] (out) -- (stop);
+
+
+\end{tikzpicture}

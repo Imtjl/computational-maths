@@ -1,0 +1,35 @@
+\section{Блок-схема метода Милна}
+
+\begin{tikzpicture}[node distance=2cm, auto]
+
+\node (start) [startstop] {Начало};
+\node (input) [io, below of=start] {$f$, $\epsilon$, $a$, $y_a$, $b$};
+\node (init) [process, below of=input] {$h = \frac{b - a}{100}$};
+\node (initVars) [prep, below of=init] {$x = a + 3h$, $y = y_3$};
+
+\node (predCorr) [process, below of=initVars, yshift=-1cm] {Calculate $y_{pred}$, $y_{corr}$};
+\node (decision) [decision, below of=predCorr, yshift=-1cm] {$|y_{corr} - y_{pred}| < \epsilon$};
+
+\node (updateVars) [process, right of=decision, xshift=4cm] {Update $x, y$};
+\node (halfStep) [process, left of=decision, xshift=-4cm, align=center, text width=4cm] {Reduce $h$ \\ reset points};
+
+\node (checkX) [decision, below of=decision, yshift=-1.5cm] {$x < b$};
+\node (output) [io, below of=checkX, yshift=-1cm, xshift=2cm] {$y$};
+\node (stop) [startstop, below of=output] {Конец};
+
+\draw [arrow] (start) -- (input);
+\draw [arrow] (input) -- (init);
+\draw [arrow] (init) -- (initVars);
+\draw [arrow] (initVars) -- (predCorr);
+\draw [arrow] (predCorr) -- (decision);
+\draw [arrow] (decision) -- node[anchor=south] {да} (updateVars);
+\draw [arrow] (decision) -- node[anchor=south] {нет} (halfStep);
+
+
+\draw [arrow] (updateVars) |- (checkX);
+\draw [arrow] (halfStep) |- (checkX);
+\draw [arrow] (checkX.south) -- ++(0, -1) -| node[anchor=west, near start, above] {да} ++ (-9, 0) |- (initVars.west);
+\draw [arrow] (checkX.south) -- ++(0, -1) -| node[anchor=west] {нет} (output);
+\draw [arrow] (output) -- (stop);
+
+\end{tikzpicture}
