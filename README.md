@@ -10,8 +10,8 @@ computational mathematics topics and algorithms.
       (`linear-approx-min-square-root`)**: Implementing linear approximation
       through the minimal square root technique.
 
-- [ ] **Solving SLAE using Gauss Main Element Method
-      (`solve-SLAE-Gauss-main-element`)**: _In Progress_. Methodology for
+- [x] **Solving SLAE using Gauss Main Element Method
+      (`solve-SLAE-Gauss-main-element`)**: Methodology for
       solving systems of linear algebraic equations via the Gauss main element
       approach.
 
