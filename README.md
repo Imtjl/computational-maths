@@ -1,7 +1,7 @@
 # Computational Maths Repository
 
 Here you can find `C++` and `LaTeX` implementations, offering detailed
-`PRF reports` available in both light and dark themes. Our focus is on various
+`PDF reports` available in both light and dark themes. Our focus is on various
 computational mathematics topics and algorithms.
 
 ## Table of Contents
